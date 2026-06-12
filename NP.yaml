@@ -1,0 +1,58 @@
+---
+# Allow traffic only from backend
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: my-np
+spec:
+  podSelector:
+    matchLabels:
+      app: database
+  policyTypes:
+    - Ingress
+  
+  Ingress:
+    - from:
+        - podSelector:
+            matchLabels:
+              app: backend
+
+---
+# Deny all Inbound traffic
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: deny-all-Inbound
+spec:
+  podSelector: {}
+  policyTypes:
+    - Ingress
+
+---
+# Deny all traffic Inbound+Outbound
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: deny-all-Inbound
+spec:
+  podSelector: {}
+  policyTypes:
+    - Ingress
+    - Egress
+            
+---
+# allow only port 80
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: http
+spec:
+  podSelector:
+    matchLabels:
+      app: database
+  policyTypes:
+    - Ingress
+  Ingress:
+    - from
+        - protocol: TCP
+          port: 80
